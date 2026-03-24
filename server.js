@@ -193,6 +193,10 @@ function parseResponse(raw, senderFirstName, prospectName, prospectCompany) {
 
 // ─── Routes ─────────────────────────────────────────────────────────
 
+app.get('/', (req, res) => {
+  res.json({ name: 'OutreachGPT API', status: 'running', endpoints: ['POST /generate', 'GET /health'] });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
