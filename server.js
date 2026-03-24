@@ -17,7 +17,25 @@ const PORT = process.env.PORT || 3000;
 
 // ─── Middleware ──────────────────────────────────────────────────────
 
-app.use(cors());
+const ALLOWED_ORIGINS = [
+  // Chrome extension origin (set EXTENSION_ID env var after loading extension)
+  process.env.EXTENSION_ID ? `chrome-extension://${process.env.EXTENSION_ID}` : null,
+  // Local development
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://127.0.0.1:3000',
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (server-to-server, curl, health checks)
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    // In beta, also allow chrome-extension:// origins generically
+    if (origin.startsWith('chrome-extension://')) return callback(null, true);
+    callback(new Error('CORS: origin not allowed'));
+  },
+}));
 app.use(express.json());
 
 // ─── In-Memory Rate Limiting ────────────────────────────────────────
