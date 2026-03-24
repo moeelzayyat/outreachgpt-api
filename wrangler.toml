@@ -1,0 +1,13 @@
+name = "outreachgpt-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# Set these via wrangler secret put or in Cloudflare dashboard:
+# OPENAI_API_KEY = "sk-..."
+# BETA_CODES = "code1,code2,code3"
+
+[[kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "YOUR_KV_NAMESPACE_ID"
+# Create with: wrangler kv:namespace create "RATE_LIMITS"
